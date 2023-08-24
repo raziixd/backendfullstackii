@@ -35,7 +35,7 @@ jobs:
       - name: Conectar via SSH no servidor de Produção e realizar a publicação.
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: 129.146.32.171
+          host: 129.146.68.51
           username: ${{ env.USUARIO }}
           password: ${{ env.SENHA }}
           port: 22
