@@ -4,17 +4,14 @@ export default async function conectar(){
     if (global.conexao && global.conexao.status != "disconnected"){
         return global.conexao;
     }
-    else{
 
-        
-        const conexao = await mysql.createConnection({
-            host:"localhost",
-            user:"aluno19-pfsii",
-            port: "3306",
-            password :"aluno19-pfsii",
-            database:"backendaluno19-pfsii"
-        });
-    }
+    const conexao = await mysql.createConnection({
+        host:"localhost",
+        user:"aluno19-pfsii",
+        port: 3306,
+        password :"aluno19-pfsii",
+        database:"backendaluno19-pfsii"
+    });
 
     global.conexao = conexao;
 
