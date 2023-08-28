@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import rotaUsuario from './Rotas/rotaUsuario.js'
+import rotaDoacao from './Rotas/rotaDoacao.js';
 
 
 const hostname = "0.0.0.0";
@@ -12,8 +13,14 @@ app.use(cors({ origin: '*' }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+// app.use('/doacao', rotaUsuario);
+
 app.use('/usuarios', rotaUsuario);
 
+
+// app.listen(porta, hostname, () => {
+//     console.log(`API rodando em: https://${hostname}:${porta}/doacao`)
+// })
 
 app.listen(porta, hostname, () => {
     console.log(`API rodando em: https://${hostname}:${porta}/usuarios`)
