@@ -13,7 +13,7 @@ app.use(cors({ origin: '*' }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-// app.use('/doacao', rotaUsuario);
+app.use('/doacao', rotaDoacao);
 
 app.use('/usuarios', rotaUsuario);
 
@@ -23,5 +23,5 @@ app.use('/usuarios', rotaUsuario);
 // })
 
 app.listen(porta, hostname, () => {
-    console.log(`API rodando em: https://${hostname}:${porta}/usuarios`)
+    console.log(`API rodando em: https://${hostname}:${porta}`)
 })
