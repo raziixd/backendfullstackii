@@ -1,92 +1,84 @@
-import { DoacaoBD } from "../Persistencia/DoacaoBD.js"
+import { DoacaoBD } from "../Persistencia/DoacaoBD.js";
 
 // Dados que o usuario precisa informar para cadastro
-export class Doacao{
+export class Doacao {
+  #id;
+  #itemDoado;
+  #valorDoado;
+  #cpfUsuario;
 
-    #id;
-    #itemDoado;
-    #valorDoado;
-    #nome;
+  constructor(id, itemDoado, valorDoado, cpfUsuario) {
+    this.id = id;
+    this.itemDoado = itemDoado;
+    this.valorDoado = valorDoado;
+    this.cpfUsuario = cpfUsuario;
+  }
 
-    constructor(id, itemDoado, valorDoado, nome) {
-        this.id = id;
-        this.itemDoado = itemDoado;
-        this.valorDoado = valorDoado;
-        this.nome = nome;
-    }
+  get id() {
+    return this.#id;
+  }
 
-    get id(){
-        return this.#id
-    }
+  set id(novoId) {
+    this.#id = novoId;
+  }
 
-    set id(novoId) {
-        this.#id = novoId;
-    }
-    
-    get itemDoado(){
-        return this.#itemDoado
-    }
-    
-    set itemDoado(novoItemDoado) {
-        this.#itemDoado = novoItemDoado;
-    }
-    
-    get valorDoado(){
-        return this.#valorDoado
-    }
-    
-    set valorDoado(novoValorDoado) {
-        this.#valorDoado = novoValorDoado;
-    }
-    
-    get nome() {
-        return this.#nome
-    }
-    
-    set nome(novoNome){
-        if(novoNome != "")
-            this.#nome = novoNome;
-    }
+  get itemDoado() {
+    return this.#itemDoado;
+  }
 
-    toJSON(){
-        return{
-            "id"         :   this.#id,
-            "itemDoado"  :   this.#itemDoado,
-            "valorDoado" :   this.#valorDoado,
-            "nome"       :   this.#nome,
-            
+  set itemDoado(novoItemDoado) {
+    this.#itemDoado = novoItemDoado;
+  }
 
-        }
-    }
+  get valorDoado() {
+    return this.#valorDoado;
+  }
 
-    async gravar(){ 
-        const doacaoBD = new DoacaoBD();
-        await doacaoBD.incluir(this);
+  set valorDoado(novoValorDoado) {
+    this.#valorDoado = novoValorDoado;
+  }
 
-    }
+  get cpfUsuario() {
+    return this.#cpfUsuario;
+  }
 
-    async atualizar() {
-        const doacaoBD = new DoacaoBD();
-        await doacaoBD.alterar(this);
-    }
+  set cpfUsuario(novoCpfUsuario) {
+    if (novoCpfUsuario != "") this.#cpfUsuario = novoCpfUsuario;
+  }
 
-    async removerDoBancoDados() {
-        const doacaoBD = new DoacaoBD();
-        await doacaoBD.excluir(this);
-    }
+  toJSON() {
+    return {
+      id: this.#id,
+      itemDoado: this.#itemDoado,
+      valorDoado: this.#valorDoado,
+      cpfUsuario: this.#cpfUsuario,
+    };
+  }
 
-    async consultar(termo) {
-        const doacaoBD = new DoacaoBD();
-        const doacaos = await doacaoBD.consultar(termo);
-        return doacaos;
+  async gravar() {
+    const doacaoBD = new DoacaoBD();
+    await doacaoBD.incluir(this);
+  }
 
-    }
+  async atualizar() {
+    const doacaoBD = new DoacaoBD();
+    await doacaoBD.alterar(this);
+  }
 
-    async consultarCPF(id) {
-        const doacaoBD = new DoacaoBD();
-        const doacaos = await doacaoBD.consultarCPF(id);
-        return doacaos;
+  async removerDoBancoDados() {
+    const doacaoBD = new DoacaoBD();
+    await doacaoBD.excluir(this);
+  }
 
-    }
+  async consultar(termo) {
+    const doacaoBD = new DoacaoBD();
+    const doacaos = await doacaoBD.consultar(termo);
+    return doacaos;
+  }
 
+  async consultarCPF(id) {
+    const doacaoBD = new DoacaoBD();
+    const doacaos = await doacaoBD.consultarCPF(id);
+    return doacaos;
+  }
 }

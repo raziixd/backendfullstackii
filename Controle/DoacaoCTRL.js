@@ -1,76 +1,103 @@
 import { Doacao } from "../Modelo/Doacao.js";
+import { Usuario } from "../Modelo/Usuario.js";
+
 export class DoacaoCTRL {
-  gravar(requisicao, resposta) {
+  async gravar(requisicao, resposta) {
     resposta.type("application/json");
     if (requisicao.method === "POST" && requisicao.is("application/json")) {
       const dados = requisicao.body;
-      const id = dados.id;
       const itemDoado = dados.itemDoado;
       const valorDoado = dados.valorDoado;
-      const nome = dados.nome;
-      
-      if (
-        id &&
-        itemDoado &&
-        valorDoado &&
-        nome 
-      ) {
-        const doacao = new Doacao(
-            id &&
-            itemDoado &&
-            valorDoado &&
-            nome 
-        );
-
-        doacao
-          .gravar()
-          .then(() => {
-            resposta.status(200).json({
+      const cpfUsuario = dados.usuario.cpf;
+      const usuario = new Usuario(0, "");
+      const existeUsuario = await usuario.consultar(cpfUsuario);
+      if (existeUsuario) {
+        try {        
+        const doacao = new Doacao(0, itemDoado, valorDoado, cpfUsuario);
+        await doacao.gravar();
+            resposta.json({
               status: true,
-              mensagem: "Doacao cadastrada com sucesso!",
+              id: doacao.id,
+              mensagem: "Doação registrada",
             });
-          })
-          .catch((erro) => {
-            resposta.status(500).json({
-              status: false,
-              mensagem: erro.message,
-            });
+          
+        }catch(erro) {
+          resp.json({
+            status: false,
+            mensagem: "Usuário não encontrado!",
           });
+        }
       } else {
-        resposta.status(400).json({
+        resp.json({
           status: false,
-          mensagem: "Informe TODOS os dados!",
+          mensagem: "Usuário não encontrado!",
         });
       }
-    } else {
-      resposta.status(400).json({
-        status: false,
-        mensagem: "Método não permitido ou usuário JSON não fornecido!",
-      });
     }
   }
+  //     if (id && itemDoado && valorDoado && nome) {
+  //       const doacao = new Doacao(id, itemDoado, valorDoado, nome);
 
-  atualizar(requisicao, resposta) {
+  //       doacao
+  //         .gravar()
+  //         .then(() => {
+  //           resposta.status(200).json({
+  //             status: true,
+  //             mensagem: "Doação cadastrada com sucesso!",
+  //           });
+  //         })
+  //         .catch((erro) => {
+  //           resposta.status(500).json({
+  //             status: false,
+  //             mensagem: erro.message,
+  //           });
+  //         });
+  //     } else {
+  //       resposta.status(400).json({
+  //         status: false,
+  //         mensagem: "Informe TODOS os dados!",
+  //       });
+  //     }
+  //   } else {
+  //     resposta.status(400).json({
+  //       status: false,
+  //       mensagem: "Método não permitido ou usuário JSON não fornecido!",
+  //     });
+  //   }
+  // }
+
+  async atualizar(requisicao, resposta) {
     resposta.type("application/json");
 
     if (requisicao.method === "PUT" && requisicao.is("application/json")) {
-        const dados = requisicao.body;
-        const id = dados.id;
-        const itemDoado = dados.itemDoado;
-        const valorDoado = dados.valorDoado;
-        const nome = dados.nome;
-      if (
-        id &&
-        itemDoado &&
-        valorDoado &&
-        nome 
-      ) {
-        const doacao = new Doacao(
-            id &&
-            itemDoado &&
-            valorDoado &&
-            nome 
-        );
+      try{
+
+      
+      const dados = requisicao.body;
+      const itemDoado = dados.itemDoado;
+      const valorDoado = dados.valorDoado;
+      const cpfUsuario = dados.usuario.cpf;
+      const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario)
+
+      if (cpfUsuario) {
+        const doacao = new Doacao (id, itemDoado, valorDoado, cpfUsuario);
+        await doacao.atualizar();
+        resposta.json({
+          status: true,
+          id: doacao.id,
+          mensagem: "Doação atualizada!"
+        })
+      }
+    }catch (erro) {
+      resposta.json({
+        status: false,
+        mensagem: "Usuário não encontrado"
+      })
+    }
+  
+
+      if (id && itemDoado && valorDoado && cpfUsuario) {
+        const doacao = new Doacao(id, itemDoado, valorDoado, cpfUsuario);
 
         doacao
           .atualizar()
@@ -144,8 +171,8 @@ export class DoacaoCTRL {
 
       doacao
         .consultar("")
-        .then((doacaos) => {
-          resposta.status(200).json(doacaos);
+        .then((doacao) => {
+          resposta.status(200).json(doacao);
         })
         .catch((erro) => {
           resposta.status(500).json({
@@ -168,9 +195,9 @@ export class DoacaoCTRL {
     if (requisicao.method === "GET") {
       const doacao = new Doacao();
       doacao
-        .consultarCPF(cpf)
-        .then((doacaos) => {
-          resposta.status(200).json(doacaos);
+        .consultarCPF(id)
+        .then((doacao) => {
+          resposta.status(200).json(doacao);
         })
         .catch((erro) => {
           resposta.status(500).json({

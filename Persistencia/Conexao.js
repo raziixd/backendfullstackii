@@ -1,20 +1,25 @@
-import mysql from 'mysql2/promise';
+import mysql from "mysql2/promise";
 
-export default async function conectar(){
-    if (global.conexao && global.conexao.status != "disconnected"){
-        return global.conexao;
-    }
+export default async function conectar() {
+  if (global.conexao && global.conexao.status != "disconnected") {
+    return global.conexao;
+  }
 
-    const conexao = await mysql.createConnection({
-        host:"localhost",
-        user:"aluno19-pfsii",
-        port: 3306,
-        password :"aluno19-pfsii",
-        database:"backendaluno19-pfsii"
-    });
+  // const conexao = await mysql.createConnection({
+  //   host: "localhost",
+  //   user: "aluno19-pfsii",
+  //   port: 3306,
+  //   password: "aluno19-pfsii",
+  //   database: "backendaluno19-pfsii",
+  // });
 
-    global.conexao = conexao;
+  const conexao = await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "backend"
+  });
+  global.conexao = conexao;
 
-    return conexao;
-
+  return conexao;
 }

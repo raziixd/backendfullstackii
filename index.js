@@ -4,8 +4,9 @@ import rotaUsuario from './Rotas/rotaUsuario.js'
 import rotaDoacao from './Rotas/rotaDoacao.js';
 
 
-const hostname = "0.0.0.0";
-const porta = "4019";
+// const hostname = "0.0.0.0";
+// const porta = "4019";
+
 
 const app = express();
 
@@ -22,6 +23,11 @@ app.use('/usuarios', rotaUsuario);
 //     console.log(`API rodando em: https://${hostname}:${porta}/doacao`)
 // })
 
-app.listen(porta, hostname, () => {
-    console.log(`API rodando em: https://${hostname}:${porta}`)
-})
+// app.listen(porta, hostname, () => {
+//     console.log(`API rodando em: https://${hostname}:${porta}`)
+// })
+
+
+app.listen(3007, "localhost", () => {
+  console.log("API escutando no link: http://localhost:3007/usuarios");
+});
