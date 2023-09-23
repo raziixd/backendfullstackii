@@ -66,66 +66,103 @@ export class DoacaoCTRL {
   //   }
   // }
 
+  
   async atualizar(requisicao, resposta) {
     resposta.type("application/json");
-
-    if (requisicao.method === "PUT" && requisicao.is("application/json")) {
-      try{
-
-      
+    if (requisicao.method === "PUT") {
+      try {
       const dados = requisicao.body;
+      const id = dados.id;
       const itemDoado = dados.itemDoado;
       const valorDoado = dados.valorDoado;
       const cpfUsuario = dados.usuario.cpf;
       const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario)
 
-      if (cpfUsuario) {
-        const doacao = new Doacao (id, itemDoado, valorDoado, cpfUsuario);
-        await doacao.atualizar();
-        resposta.json({
-          status: true,
-          id: doacao.id,
-          mensagem: "Doação atualizada!"
-        })
-      }
-    }catch (erro) {
-      resposta.json({
-        status: false,
-        mensagem: "Usuário não encontrado"
-      })
-    }
-  
+        if (cpfUsuario) {
+          const doacao = new Doacao(id, itemDoado, valorDoado, cpfUsuario);
+          await doacao.atualizar();
 
-      if (id && itemDoado && valorDoado && cpfUsuario) {
-        const doacao = new Doacao(id, itemDoado, valorDoado, cpfUsuario);
-
-        doacao
-          .atualizar()
-          .then(() => {
-            resposta.status(200).json({
-              status: true,
-              mensagem: "Doacao atualizada com sucesso!",
-            });
-          })
-          .catch((erro) => {
-            resposta.status(500).json({
-              status: false,
-              mensagem: erro.message,
-            });
+          resposta.json({
+            status: true,
+            codigo: agendamento.codigo,
+            mensagem: "Doação atualizada com sucesso!",
           });
-      } else {
-        resposta.status(400).json({
+        } /*  else {
+          resp.json({
+            status: false,
+            mensagem: "Usuário não encontrado!",
+          });
+        } */
+      } catch (erro) {
+        resposta.json({
           status: false,
-          mensagem: "Informe TODOS os dados!",
+          mensagem: "Usuário não encontrado!",
         });
       }
-    } else {
-      resposta.status(400).json({
-        status: false,
-        mensagem: "Método não permitido ou usuário JSON não fornecido!",
-      });
     }
   }
+
+  // async atualizar(requisicao, resposta) {
+  //   resposta.type("application/json");
+
+  //   if (requisicao.method === "PUT" && requisicao.is("application/json")) {
+  //     try{
+
+      
+  //     const dados = requisicao.body;
+  //     const id = dados.id;
+  //     const itemDoado = dados.itemDoado;
+  //     const valorDoado = dados.valorDoado;
+  //     const cpfUsuario = dados.usuario.cpf;
+  //     const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario)
+
+  //     if (cpfUsuario) {
+  //       const doacao = new Doacao (id, itemDoado, valorDoado, cpfUsuario);
+  //       await doacao.atualizar();
+  //       resposta.json({
+  //         status: true,
+  //         id: doacao.id,
+  //         mensagem: "Doação atualizada!"
+  //       })
+  //     }
+  //   }catch (erro) {
+  //     resposta.json({
+  //       status: false,
+  //       mensagem: "Usuário não encontrado"
+  //     })
+  //   }
+  
+
+  //     if (id && itemDoado && valorDoado && cpfUsuario) {
+  //       const doacao = new Doacao(id, itemDoado, valorDoado, cpfUsuario);
+
+  //       doacao
+  //         .atualizar()
+  //         .then(() => {
+  //           resposta.status(200).json({
+  //             status: true,
+  //             mensagem: "Doacao atualizada com sucesso!",
+  //           });
+  //         })
+  //         .catch((erro) => {
+  //           resposta.status(500).json({
+  //             status: false,
+  //             mensagem: erro.message,
+  //           });
+  //         });
+  //     } else {
+  //       resposta.status(400).json({
+  //         status: false,
+  //         mensagem: "Informe TODOS os dados!",
+  //       });
+  //     }
+  //   } else {
+  //     resposta.status(400).json({
+  //       status: false,
+  //       mensagem: "Método não permitido ou usuário JSON não fornecido!",
+  //     });
+  //   }
+  // }
 
   excluir(requisicao, resposta) {
     resposta.type("application/json");
