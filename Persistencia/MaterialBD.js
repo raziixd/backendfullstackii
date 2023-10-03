@@ -39,7 +39,7 @@ export class MaterialBD {
   async consultar(termo) {
     const conexao = await conectar();
     const sql =
-      "SELECT m.*, u.nome FROM material as m INNER JOIN usuario as u ON d.cpfUsuario = u.cpf WHERE nome LIKE ?";
+      "SELECT m.*, u.nome FROM material as m INNER JOIN usuario as u ON m.cpfUsuario = u.cpf WHERE nome LIKE ?";
     const valores = ["%" + termo + "%"];
     const [rows] = await conexao.query(sql, valores);
     // global.poolConexoes.pool.releaseConnection(conexao);

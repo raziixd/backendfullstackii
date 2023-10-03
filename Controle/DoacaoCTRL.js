@@ -84,7 +84,7 @@ export class DoacaoCTRL {
 
           resposta.json({
             status: true,
-            codigo: agendamento.codigo,
+            codigo: doacao.codigo,
             mensagem: "Doação atualizada com sucesso!",
           });
         } /*  else {

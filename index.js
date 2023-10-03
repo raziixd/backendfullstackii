@@ -5,9 +5,6 @@ import rotaDoacao from './Rotas/rotaDoacao.js';
 import rotaMaterial from './Rotas/rotaMaterial.js'
 
 
-// const hostname = "0.0.0.0";
-// const porta = "4019";
-
 
 const app = express();
 
@@ -23,15 +20,19 @@ app.use('/usuarios', rotaUsuario);
 app.use('/material', rotaMaterial);
 
 
-// app.listen(porta, hostname, () => {
-//     console.log(`API rodando em: https://${hostname}:${porta}/doacao`)
-// })
+const hostname = "0.0.0.0";
+const porta = "4019";
 
 // app.listen(porta, hostname, () => {
-//     console.log(`API rodando em: https://${hostname}:${porta}`)
-// })
+  //     console.log(`API rodando em: https://${hostname}:${porta}/doacao`)
+  // })
+
+app.listen(porta, hostname, () => {
+    console.log(`API rodando em: https://${hostname}:${porta}`)
+})
 
 
-app.listen(3007, "localhost", () => {
-  console.log("API escutando no link: http://localhost:3007/usuarios");
-});
+//LOCAL
+// app.listen(3007, "localhost", () => {
+//   console.log("API escutando no link: http://localhost:3007/usuarios");
+// });
