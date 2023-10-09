@@ -1,13 +1,14 @@
 import { Material } from "../Modelo/Material.js";
 import conectar from "./Conexao.js";
 import  { Usuario } from "../Modelo/Usuario.js";
+import { Doacao } from "../Modelo/Doacao.js";
 export class MaterialBD {
   async incluir(material) {
     if (material instanceof Material) {
       const conexao = await conectar();
       const sql =
-        "INSERT INTO material (item, qtd, cpfUsuario) VALUES (?,?,?)";
-      const valores = [material.item, material.qtd, material.cpfUsuario];
+        "INSERT INTO material (id_doacao, item, qtd, cpfUsuario) VALUES (?,?,?,?)";
+      const valores = [material.id_doacao, material.item, material.qtd, material.cpfUsuario];
       await conexao.query(sql, valores);
     }
   }
@@ -16,8 +17,9 @@ export class MaterialBD {
     if (material instanceof Material) {
       const conexao = await conectar();
       const sql =
-        "UPDATE material SET item = ?, qtd = ?, cpfUsuario = ? WHERE id = ?";
+        "UPDATE material SET id_doacao = ?, item = ?, qtd = ?, cpfUsuario = ? WHERE id = ?";
       const valores = [
+        material.id_doacao,
         material.item,
         material.qtd,
         material.cpfUsuario,
@@ -39,24 +41,44 @@ export class MaterialBD {
   async consultar(termo) {
     const conexao = await conectar();
     const sql =
-      "SELECT m.*, u.nome FROM material as m INNER JOIN usuario as u ON m.cpfUsuario = u.cpf WHERE nome LIKE ?";
+    `SELECT *       
+      FROM doacao as d 
+      INNER JOIN usuario as u ON d.cpfUsuario = u.cpf 
+      INNER JOIN material as m ON d.id = m.id_doacao
+      WHERE nome LIKE ?
+      `
+  //   SELECT
+  //     m.id AS id,
+  //     d.ItemDoado AS item,
+  //     d.id as id_doacao,
+  //     m.qtd,
+  //     u.cpf AS cpfUsuario
+      
+  //   FROM doacao d
+  //   INNER JOIN usuario u ON d.cpfUsuario = u.cpf
+  //   INNER JOIN material m ON d.id = m.id_doacao
+  // `
+  
     const valores = ["%" + termo + "%"];
     const [rows] = await conexao.query(sql, valores);
     // global.poolConexoes.pool.releaseConnection(conexao);
 
-    const listaDoacoes = [];
+    const listaMaterial = [];
     for (const row of rows) {
+      const doacao = new Doacao(row["id_doacao"])
       const usuario = new Usuario(row["cpfUsuario"], row["nome"]);
       const material = new Material(
+      
         row["id"],
+        row["id_doacao"],
         row["item"],
         row["qtd"],
         row["cpfUsuario"],
         usuario
       );
-      listaDoacoes.push(material);
+      listaMaterial.push(material);
     }
-    return listaDoacoes;
+    return listaMaterial;
   }
   
   // async consultar(termo) {
@@ -64,7 +86,7 @@ export class MaterialBD {
   //   const sql = "SELECT * FROM material WHERE cpfUsuario LIKE ?";
   //   const valores = ["%" + termo + "%"];
   //   const [rows] = await conexao.query(sql, valores);
-  //   const listaDoacao = [];
+  //   const listaMaterial = [];
   //   for (const row of rows) {
   //     const material = new Material(
   //       row["id"],
@@ -72,25 +94,26 @@ export class MaterialBD {
   //       row["qtd"],
   //       row["cpfUsuario"]
   //     );
-  //     listaDoacao.push(material);
+  //     listaMaterial.push(material);
   //   }
-  //   return listaDoacao;
+  //   return listaMaterial;
   // }
   async consultarCPF(cpf) {
     const conexao = await conectar();
     const sql = "SELECT * FROM material WHERE cpf = ?";
     const valores = [cpf];
     const [rows] = await conexao.query(sql, valores);
-    const listaDoacao = [];
+    const listaMaterial = [];
     for (const row of rows) {
       const material = new Material(
         row["id"],
+        row["id_doacao"],
         row["item"],
         row["qtd"],
         row["cpfUsuario"]
       );
-      listaDoacao.push(material);
+      listaMaterial.push(material);
     }
-    return listaDoacao;
+    return listaMaterial;
   }
 }

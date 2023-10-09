@@ -20,19 +20,28 @@ app.use('/usuarios', rotaUsuario);
 app.use('/material', rotaMaterial);
 
 
-const hostname = "0.0.0.0";
+const hostname = "localhost";
 const porta = "4019";
 
-// app.listen(porta, hostname, () => {
-  //     console.log(`API rodando em: https://${hostname}:${porta}/doacao`)
-  // })
-
 app.listen(porta, hostname, () => {
-    console.log(`API rodando em: https://${hostname}:${porta}`)
-})
+      console.log(`API rodando em: https://${hostname}:${porta}/doacao`)  })
+
+// app.listen(porta, hostname, () => {
+//     console.log(`API rodando em: https://${hostname}:${porta}/usuarios`)
+// })
+// app.listen(porta, hostname, () => {
+//     console.log(`API rodando em: https://${hostname}:${porta}/material`)
+// })
+
 
 
 //LOCAL
 // app.listen(3007, "localhost", () => {
 //   console.log("API escutando no link: http://localhost:3007/usuarios");
+// });
+// app.listen(3008, "localhost", () => {
+//   console.log("API escutando no link: http://localhost:3008/doacao");
+// });
+// app.listen(3009, "localhost", () => {
+//   console.log("API escutando no link: http://localhost:3009/material");
 // });

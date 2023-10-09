@@ -3,12 +3,14 @@ import { MaterialBD } from "../Persistencia/MaterialBD.js";
 // Dados que o usuario precisa informar para cadastro
 export class Material {
   #id;
+  #id_doacao;
   #item;
   #qtd;
   #cpfUsuario;
 
-  constructor(id, item, qtd, cpfUsuario) {
+  constructor(id, id_doacao, item, qtd, cpfUsuario) {
     this.id = id;
+    this.id_doacao = id_doacao;
     this.item = item;
     this.qtd = qtd;
     this.cpfUsuario = cpfUsuario;
@@ -20,6 +22,13 @@ export class Material {
 
   set id(novoId) {
     this.#id = novoId;
+  }
+  get id_doacao() {
+    return this.#id_doacao;
+  }
+
+  set id_doacao(novoid_doacao) {
+    this.#id_doacao = novoid_doacao;
   }
 
   get item() {
@@ -49,6 +58,7 @@ export class Material {
   toJSON() {
     return {
       id: this.#id,
+      id_doacao: this.#id_doacao,
       item: this.#item,
       qtd: this.#qtd,
       cpfUsuario: this.#cpfUsuario,

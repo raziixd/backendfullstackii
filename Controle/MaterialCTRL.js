@@ -1,23 +1,30 @@
+import { Doacao } from "../Modelo/Doacao.js";
 import { Material } from "../Modelo/Material.js";
 import { Usuario } from "../Modelo/Usuario.js";
 
 export class MaterialCTRL {
   async gravar(requisicao, resposta) {
     resposta.type("application/json");
-    if (requisicao.method === "POST" && requisicao.is("application/json")) {
+    if (requisicao.method === "POST" && requisicao.is("application/json")) {      
       const dados = requisicao.body;
       const item = dados.item;
+      const id_doacao = dados.id_doacao ;
       const qtd = dados.qtd;
-      const cpfUsuario = dados.usuario.cpf;
+      const cpfUsuario = dados.usuario.cpf;      
       const usuario = new Usuario(0, "");
       const existeUsuario = await usuario.consultar(cpfUsuario);
-      if (existeUsuario) {
-        try {        
-        const doacao = new Material(0, item, qtd, cpfUsuario);
-        await doacao.gravar();
+      const doacao = new Doacao(0,"","");
+      const existeDoacao = await doacao.consultar(doacao.id)
+      console.log(item)
+      console.log(id_doacao)
+      if (existeUsuario || existeDoacao) {
+        try {      
+          
+        const material = new Material(0, id_doacao, item, qtd, cpfUsuario);        
+        await material.gravar();
             resposta.json({
               status: true,
-              id: doacao.id,
+              id: material.id,
               mensagem: "Doação registrada",
             });
           
@@ -73,18 +80,19 @@ export class MaterialCTRL {
       try {
       const dados = requisicao.body;
       const id = dados.id;
-      const item = dados.item;
+      const id_doacao = dados.id_doacao;
+      const item = dados.itemDoado;
       const qtd = dados.qtd;
       const cpfUsuario = dados.usuario.cpf;
       const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario)
 
         if (cpfUsuario) {
-          const doacao = new Material(id, item, qtd, cpfUsuario);
-          await doacao.atualizar();
+          const material = new Material(id, id_doacao, item, qtd, cpfUsuario);
+          await material.atualizar();
 
           resposta.json({
             status: true,
-            codigo: agendamento.codigo,
+            codigo: material.codigo,
             mensagem: "Doação atualizada com sucesso!",
           });
         } /*  else {
@@ -171,9 +179,9 @@ export class MaterialCTRL {
       const id = dados.id;
 
       if (id) {
-        const doacao = new Material(id);
+        const material = new Material(id);
 
-        doacao
+        material
           .removerDoBancoDados()
           .then(() => {
             resposta.status(200).json({
@@ -204,12 +212,12 @@ export class MaterialCTRL {
   consultar(requisicao, resposta) {
     resposta.type("application/json");
     if (requisicao.method === "GET") {
-      const doacao = new Material();
+      const material = new Material();
 
-      doacao
+      material
         .consultar("")
-        .then((doacao) => {
-          resposta.status(200).json(doacao);
+        .then((material) => {
+          resposta.status(200).json(material);
         })
         .catch((erro) => {
           resposta.status(500).json({
@@ -230,11 +238,11 @@ export class MaterialCTRL {
     const id = requisicao.params["id"];
 
     if (requisicao.method === "GET") {
-      const doacao = new Material();
-      doacao
+      const material = new Material();
+      material
         .consultarCPF(id)
-        .then((doacao) => {
-          resposta.status(200).json(doacao);
+        .then((material) => {
+          resposta.status(200).json(material);
         })
         .catch((erro) => {
           resposta.status(500).json({
