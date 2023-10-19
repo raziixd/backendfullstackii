@@ -38,7 +38,7 @@ export class DoacaoBD {
   async consultar(termo) {
     const conexao = await conectar();
     const sql =
-      "SELECT u.*, d.id as dId, d.valorDoado FROM doacao as d INNER JOIN usuario as u ON d.cpfUsuario = u.cpf WHERE u.nome LIKE ?";
+      "SELECT u.*, d.id as dId, d.valorDoado FROM doacao as d INNER JOIN usuario as u ON d.cpfUsuario = u.cpf WHERE u.nome LIKE ? ORDER BY id";
     const valores = ["%" + termo + "%"];
     const [rows] = await conexao.query(sql, valores);
 
