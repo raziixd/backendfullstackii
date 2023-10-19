@@ -9,6 +9,5 @@ rotaDoacao
   .put("/", doacaoCTRL.atualizar)
   .delete("/", doacaoCTRL.excluir)
   .get("/", doacaoCTRL.consultar)
-  .get("/:id", doacaoCTRL.consultarPeloCPF);
 
 export default rotaDoacao;

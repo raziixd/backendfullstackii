@@ -3,15 +3,14 @@ import { DoacaoBD } from "../Persistencia/DoacaoBD.js";
 // Dados que o usuario precisa informar para cadastro
 export class Doacao {
   #id;
-  #itemDoado;
   #valorDoado;
-  #cpfUsuario;
+  #usuario;
+  
 
-  constructor(id, itemDoado, valorDoado, cpfUsuario) {
+  constructor(id, valorDoado, usuario) {
     this.id = id;
-    this.itemDoado = itemDoado;
     this.valorDoado = valorDoado;
-    this.cpfUsuario = cpfUsuario;
+    this.usuario = usuario;
   }
 
   get id() {
@@ -22,13 +21,7 @@ export class Doacao {
     this.#id = novoId;
   }
 
-  get itemDoado() {
-    return this.#itemDoado;
-  }
-
-  set itemDoado(novoItemDoado) {
-    this.#itemDoado = novoItemDoado;
-  }
+ 
 
   get valorDoado() {
     return this.#valorDoado;
@@ -38,20 +31,19 @@ export class Doacao {
     this.#valorDoado = novoValorDoado;
   }
 
-  get cpfUsuario() {
-    return this.#cpfUsuario;
+  get usuario() {
+    return this.#usuario;
   }
 
-  set cpfUsuario(novoCpfUsuario) {
-    if (novoCpfUsuario != "") this.#cpfUsuario = novoCpfUsuario;
+  set usuario(novoUsuario) {
+    this.#usuario = novoUsuario;
   }
 
   toJSON() {
     return {
-      id: this.#id,
-      itemDoado: this.#itemDoado,
+      id: this.#id,      
       valorDoado: this.#valorDoado,
-      cpfUsuario: this.#cpfUsuario,
+      usuario: this.#usuario?.toJSON(),
     };
   }
 
@@ -70,15 +62,15 @@ export class Doacao {
     await doacaoBD.excluir(this);
   }
 
-  async consultar(termo) {
+   async consultar(termo) {
     const doacaoBD = new DoacaoBD();
     const doacaos = await doacaoBD.consultar(termo);
     return doacaos;
   }
 
-  async consultarCPF(id) {
+   async consultarId(cpf) {
     const doacaoBD = new DoacaoBD();
-    const doacaos = await doacaoBD.consultarCPF(id);
+    const doacaos = await doacaoBD.consultarId(cpf);
     return doacaos;
   }
 }

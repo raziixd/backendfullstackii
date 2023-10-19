@@ -175,9 +175,10 @@ export class UsuarioCTRL {
   consultar(requisicao, resposta) {
     resposta.type("application/json");
     if (requisicao.method === "GET") {
-      const usuario = new Usuario();
 
-      usuario
+        const usuario = new Usuario('');
+
+        usuario
         .consultar("")
         .then((usuarios) => {
           resposta.status(200).json(usuarios);
@@ -201,9 +202,10 @@ export class UsuarioCTRL {
     const cpf = requisicao.params["cpf"];
 
     if (requisicao.method === "GET") {
-      const usuario = new Usuario();
+      const usuario = new Usuario(cpf);
+
       usuario
-        .consultarCPF(cpf)
+      .consultarCPF(cpf)
         .then((usuarios) => {
           resposta.status(200).json(usuarios);
         })

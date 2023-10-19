@@ -6,8 +6,8 @@ export class DoacaoBD {
     if (doacao instanceof Doacao) {
       const conexao = await conectar();
       const sql =
-        "INSERT INTO doacao (itemDoado, valorDoado, cpfUsuario) VALUES (?,?,?)";
-      const valores = [doacao.itemDoado, doacao.valorDoado, doacao.cpfUsuario];
+        "INSERT INTO doacao (valorDoado, cpfUsuario) VALUES (?,?)";
+      const valores = [doacao.valorDoado, doacao.usuario.cpf];
       await conexao.query(sql, valores);
     }
   }
@@ -16,11 +16,10 @@ export class DoacaoBD {
     if (doacao instanceof Doacao) {
       const conexao = await conectar();
       const sql =
-        "UPDATE doacao SET itemDoado = ?, valorDoado = ?, cpfUsuario = ? WHERE id = ?";
+        "UPDATE doacao SET valorDoado = ?, cpfUsuario = ? WHERE id = ?";
       const valores = [
-        doacao.itemDoado,
         doacao.valorDoado,
-        doacao.cpfUsuario,
+        doacao.usuario.cpf,
         doacao.id,
       ];
       await conexao.query(sql, valores);
@@ -39,59 +38,59 @@ export class DoacaoBD {
   async consultar(termo) {
     const conexao = await conectar();
     const sql =
-      "SELECT d.*, u.nome FROM doacao as d INNER JOIN usuario as u ON d.cpfUsuario = u.cpf WHERE nome LIKE ?";
+      "SELECT u.*, d.id as dId, d.valorDoado FROM doacao as d INNER JOIN usuario as u ON d.cpfUsuario = u.cpf WHERE u.nome LIKE ?";
     const valores = ["%" + termo + "%"];
     const [rows] = await conexao.query(sql, valores);
-    // global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaDoacoes = [];
     for (const row of rows) {
-      const usuario = new Usuario(row["cpfUsuario"], row["nome"]);
-      const doacao = new Doacao(
-        row["id"],
-        row["itemDoado"],
-        row["valorDoado"],
-        row["cpfUsuario"],
+      const usuario = new Usuario(
+        row["cpf"],
         row["nome"],
+        row["dataNasc"],
+        row["email"],
+        row["tel"],
+        row["sexo"],
+        row["cidade"],
+        row["uf"],
+        row["treinador"],
+        row["jogador"]
+      );
+      const doacao = new Doacao(
+        row["dId"],
+        row["valorDoado"],
         usuario
       );
       listaDoacoes.push(doacao);
     }
     return listaDoacoes;
   }
-  
-  // async consultar(termo) {
-  //   const conexao = await conectar();
-  //   const sql = "SELECT * FROM doacao WHERE cpfUsuario LIKE ?";
-  //   const valores = ["%" + termo + "%"];
-  //   const [rows] = await conexao.query(sql, valores);
-  //   const listaDoacao = [];
-  //   for (const row of rows) {
-  //     const doacao = new Doacao(
-  //       row["id"],
-  //       row["itemDoado"],
-  //       row["valorDoado"],
-  //       row["cpfUsuario"]
-  //     );
-  //     listaDoacao.push(doacao);
-  //   }
-  //   return listaDoacao;
-  // }
-  async consultarCPF(cpf) {
+  async consultarId(termo) {
     const conexao = await conectar();
-    const sql = "SELECT * FROM doacao WHERE cpf = ?";
-    const valores = [cpf];
+    const sql =
+      "SELECT u.*, d.id as dId, d.valorDoado FROM doacao as d INNER JOIN usuario as u ON d.cpfUsuario = u.cpf WHERE d.id = ?";
+    const valores = [termo];
     const [rows] = await conexao.query(sql, valores);
-    const listaDoacao = [];
+
     for (const row of rows) {
-      const doacao = new Doacao(
-        row["id"],
-        row["itemDoado"],
-        row["valorDoado"],
-        row["cpfUsuario"]
+      const usuario = new Usuario(
+        row["cpf"],
+        row["nome"],
+        row["dataNasc"],
+        row["email"],
+        row["tel"],
+        row["sexo"],
+        row["cidade"],
+        row["uf"],
+        row["treinador"],
+        row["jogador"]
       );
-      listaDoacao.push(doacao);
+      const doacao = new Doacao(
+        row["dId"],
+        row["valorDoado"],
+        usuario
+      );
+      return doacao;    
     }
-    return listaDoacao;
   }
 }

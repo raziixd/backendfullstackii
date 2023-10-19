@@ -9,6 +9,5 @@ rotaMaterial
   .put("/", materialCTRL.atualizar)
   .delete("/", materialCTRL.excluir)
   .get("/", materialCTRL.consultar)
-  .get("/:id", materialCTRL.consultarPeloCPF);
 
 export default rotaMaterial;

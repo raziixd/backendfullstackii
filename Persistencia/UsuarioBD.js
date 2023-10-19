@@ -80,7 +80,6 @@ export class UsuarioBD {
     const sql = "SELECT * FROM usuario WHERE cpf = ?";
     const valores = [cpf];
     const [rows] = await conexao.query(sql, valores);
-    const listaUsuarios = [];
     for (const row of rows) {
       const usuario = new Usuario(
         row["cpf"],
@@ -94,8 +93,7 @@ export class UsuarioBD {
         row["treinador"],
         row["jogador"]
       );
-      listaUsuarios.push(usuario);
+      return usuario;
     }
-    return listaUsuarios;
   }
 }

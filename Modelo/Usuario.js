@@ -146,13 +146,13 @@ export class Usuario {
     await usuarioBD.excluir(this);
   }
 
-  async consultar(termo) {
+    async consultar(termo) {
     const usuarioBD = new UsuarioBD();
     const usuarios = await usuarioBD.consultar(termo);
     return usuarios;
   }
 
-  async consultarCPF(cpf) {
+    async consultarCPF(cpf) {
     const usuarioBD = new UsuarioBD();
     const usuarios = await usuarioBD.consultarCPF(cpf);
     return usuarios;
