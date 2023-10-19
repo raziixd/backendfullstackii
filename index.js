@@ -32,6 +32,6 @@ app.listen(porta, hostname, () => {
       console.log(`API rodando em: https://${hostname}:${porta}`)  })
 
 //LOCAL
-app.listen(3007, "localhost", () => {
-  console.log("API escutando no link: http://localhost:3007"); 
-});
+// app.listen(3007, "localhost", () => {
+//   console.log("API escutando no link: http://localhost:3007"); 
+// });
